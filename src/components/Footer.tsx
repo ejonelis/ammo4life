@@ -13,8 +13,8 @@ export function Footer() {
     <footer className="border-t border-border">
       <div className="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <p>
-          &copy; {new Date().getFullYear()} {siteConfig.name}. Built one lesson at a
-          time.
+          &copy; {new Date().getFullYear()} {siteConfig.name}. Written down so it
+          isn&apos;t lost.
         </p>
         <div className="flex items-center gap-4">
           {socialLinks.map((link) => (

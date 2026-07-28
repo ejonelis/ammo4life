@@ -1,18 +1,18 @@
 // Central place to personalize the site. Edit these values to make it yours.
 export const siteConfig = {
   name: "Ammo4Life",
-  tagline: "Ammunition for the entrepreneurial life.",
+  tagline: "Everything I want my kids to have, if I'm not there to say it.",
   description:
-    "Ideas, books, tools, and lessons that took me from employee to founder to my first €1,000,000 — shared for the next person making that jump.",
+    "A running wisdom chest — quotes, books, podcasts, people, and lessons from an employee-to-founder journey — written down so it doesn't disappear. Started for my children. Open to anyone who finds it useful.",
   url: "https://ammo4life.com",
   author: {
     name: "Your Name",
     shortBio:
-      "Former employee, now founder. I write about the mindset shifts, tools, and decisions that actually moved the needle on the way to building my first company and my first €1,000,000.",
+      "Founder, father, and a believer that the best inheritance isn't money — it's the thinking that got you there. This is where I'm writing it down: the journey, the lessons, and the wisdom of others that carried me.",
   },
   nav: [
     { label: "Articles", href: "/articles" },
-    { label: "Resources", href: "/resources" },
+    { label: "Wisdom Chest", href: "/wisdom" },
     { label: "My Journey", href: "/journey" },
   ],
   social: {

@@ -40,10 +40,10 @@ export default function JourneyPage() {
           and what it did and didn&apos;t change.]
         </p>
 
-        <h2>What I&apos;d tell you over coffee</h2>
+        <h2>What I&apos;d want you to know</h2>
         <p>
-          [Edit this: the short, unvarnished version — the stuff you&apos;d only say
-          off the record.]
+          [Edit this: the short, unvarnished version — the stuff you&apos;d want
+          your kids to know even if you weren&apos;t there to say it yourself.]
         </p>
       </div>
 
@@ -52,8 +52,8 @@ export default function JourneyPage() {
           Want the lessons as they happen?
         </h2>
         <p className="mt-2 text-sm text-muted">
-          I write about this stuff as I live it, not after I&apos;ve forgotten the
-          hard parts.
+          I&apos;m writing this down as I live it, not after I&apos;ve forgotten
+          the hard parts — for my kids, and for whoever else it helps.
         </p>
         <div className="mt-5">
           <NewsletterForm />

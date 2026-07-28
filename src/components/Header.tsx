@@ -11,7 +11,7 @@ export function Header() {
         >
           {siteConfig.name}
         </Link>
-        <nav className="flex items-center gap-6 text-sm">
+        <nav className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 text-sm sm:gap-x-6">
           {siteConfig.nav.map((item) => (
             <Link
               key={item.href}

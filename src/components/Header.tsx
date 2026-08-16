@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
+import { Nav } from "@/components/Nav";
 
 export function Header() {
   return (
@@ -11,23 +12,7 @@ export function Header() {
         >
           {siteConfig.name}
         </Link>
-        <nav className="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 text-sm sm:gap-x-6">
-          {siteConfig.nav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-muted transition-colors hover:text-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Link
-            href="/#newsletter"
-            className="rounded-full bg-accent px-4 py-1.5 text-accent-foreground transition-opacity hover:opacity-90"
-          >
-            Subscribe
-          </Link>
-        </nav>
+        <Nav items={siteConfig.nav} />
       </div>
     </header>
   );

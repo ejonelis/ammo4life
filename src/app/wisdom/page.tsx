@@ -30,7 +30,8 @@ export default function WisdomPage() {
         The quotes, books, podcasts, videos, and people that actually shaped how I
         think &mdash; plus the apps and tools that got me to where I am, and the
         ones I still use every day. Kept here so none of it gets lost, for whoever
-        needs it.
+        needs it. None of it is advice &mdash; just what&apos;s stuck with me. Take
+        what&apos;s useful, leave the rest.
       </p>
 
       <div className="mt-8">

@@ -14,7 +14,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-10 text-sm text-muted sm:flex-row sm:items-center sm:justify-between">
         <p>
           &copy; {new Date().getFullYear()} {siteConfig.name}. Written down so it
-          isn&apos;t lost.
+          isn&apos;t lost. Ponderings, not advice.
         </p>
         <div className="flex items-center gap-4">
           {socialLinks.map((link) => (

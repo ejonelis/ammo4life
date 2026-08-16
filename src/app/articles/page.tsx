@@ -23,8 +23,8 @@ export default async function ArticlesPage({
       <h1 className="font-serif text-4xl font-medium tracking-tight">Articles</h1>
       <p className="mt-4 max-w-xl text-muted">
         Everything I&apos;ve written about building a business and building
-        myself &mdash; notes to myself, kept in no particular order except the
-        order I learned it in.
+        myself &mdash; notes to myself, not advice for you, kept in no particular
+        order except the order I learned it in.
       </p>
 
       {topics.length > 0 && (

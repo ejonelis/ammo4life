@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {
   wisdomSections,
+  notesToMyself,
   quotes,
   books,
   podcasts,
@@ -11,6 +12,7 @@ import {
 } from "@/lib/wisdom";
 import { ResourceList } from "@/components/ResourceList";
 import { SectionPills } from "@/components/SectionPills";
+import { QuoteList } from "@/components/QuoteList";
 
 export const metadata: Metadata = {
   title: "The Wisdom Chest",
@@ -38,21 +40,19 @@ export default function WisdomPage() {
       <div className="mt-14 space-y-16">
         <section id="quotes">
           <h2 className="font-serif text-2xl font-medium">Quotes I Ponder On</h2>
-          <div className="mt-6 space-y-8">
-            {quotes.map((quote) => (
-              <blockquote
-                key={quote.text}
-                className="border-l-2 border-accent pl-6"
-              >
-                <p className="font-serif text-xl italic leading-snug text-foreground">
-                  &ldquo;{quote.text}&rdquo;
-                </p>
-                <footer className="mt-3 text-sm text-muted">
-                  &mdash; {quote.author}
-                  {quote.note && <span className="block mt-1">{quote.note}</span>}
-                </footer>
-              </blockquote>
-            ))}
+
+          <h3 className="mt-8 text-sm font-medium uppercase tracking-wide text-muted">
+            Notes to Myself
+          </h3>
+          <div className="mt-4">
+            <QuoteList quotes={notesToMyself} />
+          </div>
+
+          <h3 className="mt-10 text-sm font-medium uppercase tracking-wide text-muted">
+            From Others I&apos;ve Read or Heard
+          </h3>
+          <div className="mt-4">
+            <QuoteList quotes={quotes} />
           </div>
         </section>
 

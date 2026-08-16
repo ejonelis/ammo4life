@@ -5,7 +5,7 @@ import { TopicPills } from "@/components/TopicPills";
 
 export const metadata: Metadata = {
   title: "Articles",
-  description: "Everything I've written about building a business and building yourself.",
+  description: "Everything I've written about building a business and building myself — notes to myself.",
 };
 
 export default async function ArticlesPage({
@@ -23,7 +23,8 @@ export default async function ArticlesPage({
       <h1 className="font-serif text-4xl font-medium tracking-tight">Articles</h1>
       <p className="mt-4 max-w-xl text-muted">
         Everything I&apos;ve written about building a business and building
-        yourself &mdash; in no particular order except the order I learned it in.
+        myself &mdash; notes to myself, kept in no particular order except the
+        order I learned it in.
       </p>
 
       {topics.length > 0 && (

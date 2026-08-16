@@ -4,7 +4,7 @@ import { NewsletterForm } from "@/components/NewsletterForm";
 
 export const metadata: Metadata = {
   title: "My Journey",
-  description: "From employee to founder to my first €1,000,000 — the real story.",
+  description: "From employee to building something of my own — the real story, as it happens.",
 };
 
 export default function JourneyPage() {
@@ -28,16 +28,18 @@ export default function JourneyPage() {
           readers relate to most, so don&apos;t polish it too much.]
         </p>
 
-        <h2>Building the first company</h2>
+        <h2>Building it now</h2>
         <p>
-          [Edit this: the messy middle. First customers, first mistakes, the
-          decisions that mattered more than they seemed to at the time.]
+          [Edit this: the messy middle, as it&apos;s actually happening — first
+          customers or first attempts, first mistakes, the decisions that matter
+          more than they seem to right now. It&apos;s fine if this isn&apos;t
+          finished. That&apos;s the point of writing it down as you go.]
         </p>
 
-        <h2>The first &euro;1,000,000</h2>
+        <h2>What I&apos;m building toward</h2>
         <p>
-          [Edit this: what that milestone actually looked like from the inside —
-          and what it did and didn&apos;t change.]
+          [Edit this: the goal you&apos;re actually chasing, and why it matters to
+          you beyond the number — whatever that goal is for you.]
         </p>
 
         <h2>What I&apos;d want you to know</h2>

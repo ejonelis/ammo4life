@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
-import { wisdomSections, quotes, books, podcasts, videos, people } from "@/lib/wisdom";
+import {
+  wisdomSections,
+  quotes,
+  books,
+  podcasts,
+  videos,
+  people,
+  toolsThen,
+  toolsNow,
+} from "@/lib/wisdom";
 import { ResourceList } from "@/components/ResourceList";
 import { SectionPills } from "@/components/SectionPills";
 
 export const metadata: Metadata = {
   title: "The Wisdom Chest",
   description:
-    "Quotes, books, podcasts, videos, and people worth remembering — kept here so none of it gets lost.",
+    "Quotes, books, podcasts, videos, people, and tools worth remembering — kept here so none of it gets lost.",
 };
 
 export default function WisdomPage() {
@@ -16,9 +25,10 @@ export default function WisdomPage() {
         The Wisdom Chest
       </h1>
       <p className="mt-4 max-w-xl text-muted">
-        Not an affiliate-link dump &mdash; the quotes, books, podcasts, videos, and
-        people that actually shaped how I think. Kept here so none of it gets lost,
-        for whoever ends up reading it.
+        The quotes, books, podcasts, videos, and people that actually shaped how I
+        think &mdash; plus the apps and tools that got me to where I am, and the
+        ones I still use every day. Kept here so none of it gets lost, for whoever
+        needs it.
       </p>
 
       <div className="mt-8">
@@ -92,6 +102,23 @@ export default function WisdomPage() {
               </li>
             ))}
           </ul>
+        </section>
+
+        <section id="tools">
+          <h2 className="font-serif text-2xl font-medium">Apps &amp; Tools</h2>
+          <p className="mt-1 text-sm text-muted">
+            What got me here, and what I actually still reach for every day.
+          </p>
+
+          <h3 className="mt-8 text-sm font-medium uppercase tracking-wide text-muted">
+            Then &mdash; tools that got me here
+          </h3>
+          <ResourceList items={toolsThen} />
+
+          <h3 className="mt-8 text-sm font-medium uppercase tracking-wide text-muted">
+            Now &mdash; tools I use every day
+          </h3>
+          <ResourceList items={toolsNow} />
         </section>
       </div>
     </div>

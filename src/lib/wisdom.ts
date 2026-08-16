@@ -32,6 +32,7 @@ export const wisdomSections: WisdomSection[] = [
   { key: "podcasts", label: "Podcasts" },
   { key: "videos", label: "YouTube & Videos" },
   { key: "people", label: "People" },
+  { key: "tools", label: "Apps & Tools" },
 ];
 
 export const quotes: Quote[] = [
@@ -89,5 +90,23 @@ export const people: Person[] = [
     name: "Add someone who shaped you",
     relationship: "How you know them",
     note: "What they taught you, in a sentence or two — the kind of thing you'd want your kids to know about this person even if they never meet them.",
+  },
+];
+
+// Tools that got you here — the ones you've since moved on from but that mattered at the time.
+export const toolsThen: Resource[] = [
+  {
+    title: "Add a tool that got you here",
+    creator: "What it was for",
+    note: "What it did for you at the time, even if you don't use it anymore.",
+  },
+];
+
+// Tools you actually rely on today.
+export const toolsNow: Resource[] = [
+  {
+    title: "Add a tool you use every day now",
+    creator: "What it's for",
+    note: "Why it's still in daily rotation.",
   },
 ];

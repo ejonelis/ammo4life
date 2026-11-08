@@ -1,0 +1,13 @@
+{
+  "name": "ammo4life",
+  "compatibility_date": "2026-10-06",
+  "observability": { "enabled": true },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ammo4life",
+      "database_id": "REPLACE_AFTER_wrangler_d1_create",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

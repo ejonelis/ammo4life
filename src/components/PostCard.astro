@@ -1,0 +1,30 @@
+---
+import type { PostMeta } from '../lib/posts';
+import { slugifyTopic } from '../lib/posts';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  post: PostMeta;
+  filterable?: boolean;
+}
+const { post, filterable = false } = Astro.props;
+const topicSlugs = post.topics.map(slugifyTopic).join(' ');
+---
+
+<article class="border-b border-border py-8 first:pt-0" data-post data-topics={filterable ? topicSlugs : undefined}>
+  <a href={`/articles/${post.slug}`} class="group block">
+    <h3 class="font-serif text-2xl font-medium leading-snug text-foreground transition-colors group-hover:text-accent">{post.title}</h3>
+    <p class="mt-2 text-muted">{post.excerpt}</p>
+    <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted">
+      <time datetime={post.date}>{formatDate(post.date)}</time>
+      <span aria-hidden="true">&middot;</span>
+      <span>{post.readingTime}</span>
+      {post.topics.length > 0 && (
+        <>
+          <span aria-hidden="true">&middot;</span>
+          <span>{post.topics.join(', ')}</span>
+        </>
+      )}
+    </div>
+  </a>
+</article>

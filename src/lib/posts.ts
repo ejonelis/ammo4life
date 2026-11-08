@@ -1,9 +1,5 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-import readingTime from "reading-time";
-
-const POSTS_DIR = path.join(process.cwd(), "content/posts");
+import { getCollection, type CollectionEntry } from 'astro:content';
+import readingTime from 'reading-time';
 
 export type PostMeta = {
   slug: string;
@@ -14,84 +10,42 @@ export type PostMeta = {
   readingTime: string;
 };
 
-export type Post = PostMeta & {
-  content: string;
-};
-
-function slugifyTopic(topic: string): string {
+export function slugifyTopic(topic: string): string {
   return topic
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
 }
 
-function readPostFile(filename: string): Post {
-  const slug = filename.replace(/\.mdx$/, "");
-  const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
-  const { data, content } = matter(raw);
-
+export function toMeta(entry: CollectionEntry<'posts'>): PostMeta {
   return {
-    slug,
-    title: data.title ?? slug,
-    date: data.date ?? new Date(0).toISOString(),
-    excerpt: data.excerpt ?? "",
-    topics: data.topics ?? [],
-    readingTime: readingTime(content).text,
-    content,
+    slug: entry.id,
+    title: entry.data.title,
+    date: entry.data.date,
+    excerpt: entry.data.excerpt,
+    topics: entry.data.topics,
+    readingTime: readingTime(entry.body ?? '').text,
   };
 }
 
-export function getAllPosts(): PostMeta[] {
-  if (!fs.existsSync(POSTS_DIR)) return [];
-
-  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"));
-
-  return files
-    .map(readPostFile)
-    .filter((post) => post.title && post.date)
-    .sort((a, b) => (a.date < b.date ? 1 : -1))
-    .map(
-      (post): PostMeta => ({
-        slug: post.slug,
-        title: post.title,
-        date: post.date,
-        excerpt: post.excerpt,
-        topics: post.topics,
-        readingTime: post.readingTime,
-      })
-    );
+export async function getAllPosts(): Promise<PostMeta[]> {
+  const entries = await getCollection('posts');
+  return entries.map(toMeta).sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export function getPostBySlug(slug: string): Post | null {
-  const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
-  if (!fs.existsSync(filePath)) return null;
-  return readPostFile(`${slug}.mdx`);
-}
-
-export function getAllTopics(): { name: string; slug: string; count: number }[] {
-  const posts = getAllPosts();
+export async function getAllTopics(): Promise<{ name: string; slug: string; count: number }[]> {
+  const posts = await getAllPosts();
   const map = new Map<string, { name: string; slug: string; count: number }>();
 
   for (const post of posts) {
     for (const topic of post.topics) {
       const slug = slugifyTopic(topic);
       const existing = map.get(slug);
-      if (existing) {
-        existing.count += 1;
-      } else {
-        map.set(slug, { name: topic, slug, count: 1 });
-      }
+      if (existing) existing.count += 1;
+      else map.set(slug, { name: topic, slug, count: 1 });
     }
   }
 
   return Array.from(map.values()).sort((a, b) => b.count - a.count);
 }
-
-export function getPostsByTopic(topicSlug: string): PostMeta[] {
-  return getAllPosts().filter((post) =>
-    post.topics.some((topic) => slugifyTopic(topic) === topicSlug)
-  );
-}
-
-export { slugifyTopic };

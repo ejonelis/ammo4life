@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import TopicPills from '../../components/TopicPills.astro';
+import { getAllPosts, getAllTopics } from '../../lib/posts';
+
+const posts = await getAllPosts();
+const topics = await getAllTopics();
+---
+
+<Base title="Articles" description="Everything I've written about building a business and building myself — notes to myself.">
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="font-serif text-4xl font-medium tracking-tight">Articles</h1>
+    <p class="mt-4 max-w-xl text-muted">
+      Everything I've written about building a business and building myself &mdash; notes to myself, not advice for you, kept in no particular order except the order I learned it in.
+    </p>
+
+    {topics.length > 0 && <div class="mt-8"><TopicPills topics={topics} /></div>}
+
+    <div class="mt-12" id="post-list">
+      {posts.length === 0 ? (
+        <p class="text-muted">No articles here yet &mdash; check back soon.</p>
+      ) : (
+        posts.map((post) => <PostCard post={post} filterable />)
+      )}
+    </div>
+    <p id="no-posts" hidden class="mt-12 text-muted">No articles here yet &mdash; check back soon.</p>
+  </div>
+</Base>
+
+<script>
+  // /articles?topic=<slug> keeps working: all posts are prerendered and the
+  // list is filtered in the browser. Without JS the full list is shown.
+  const topic = new URLSearchParams(location.search).get('topic') ?? '';
+  const pills = document.querySelector<HTMLElement>('[data-topic-pills]');
+  const posts = document.querySelectorAll<HTMLElement>('[data-post]');
+
+  if (topic) {
+    let visible = 0;
+    posts.forEach((p) => {
+      const match = (p.dataset.topics ?? '').split(' ').includes(topic);
+      p.hidden = !match;
+      if (match) visible++;
+    });
+    document.getElementById('no-posts')!.hidden = visible > 0;
+  }
+
+  if (pills) {
+    const known = Array.from(pills.querySelectorAll<HTMLElement>('a[data-slug]')).some((a) => a.dataset.slug === topic && topic);
+    const active = known ? topic : '';
+    pills.querySelectorAll<HTMLElement>('a[data-slug]').forEach((a) => {
+      const on = a.dataset.slug === active;
+      a.className = `${pills.dataset.base} ${on ? 'border-accent bg-accent text-accent-foreground' : pills.dataset.inactive}`;
+    });
+  }
+</script>

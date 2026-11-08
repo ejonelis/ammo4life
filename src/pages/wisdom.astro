@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import ResourceList from '../components/ResourceList.astro';
+import SectionPills from '../components/SectionPills.astro';
+import QuoteList from '../components/QuoteList.astro';
+import { wisdomSections, notesToMyself, quotes, books, podcasts, videos, people, toolsThen, toolsNow } from '../lib/wisdom';
+---
+
+<Base title="The Wisdom Chest" description="Quotes, books, podcasts, videos, people, and tools worth remembering — kept here so none of it gets lost.">
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="font-serif text-4xl font-medium tracking-tight">The Wisdom Chest</h1>
+    <p class="mt-4 max-w-xl text-muted">
+      The quotes, books, podcasts, videos, and people that actually shaped how I think &mdash; plus the apps and tools that got me to where I am, and the ones I still use every day. Kept here so none of it gets lost, for whoever needs it. None of it is advice &mdash; just what's stuck with me. Take what's useful, leave the rest.
+    </p>
+
+    <div class="mt-8"><SectionPills sections={wisdomSections} /></div>
+
+    <div class="mt-14 space-y-16">
+      <section id="quotes">
+        <h2 class="font-serif text-2xl font-medium">Quotes I Ponder On</h2>
+        <h3 class="mt-8 text-sm font-medium uppercase tracking-wide text-muted">Notes to Myself</h3>
+        <div class="mt-4"><QuoteList quotes={notesToMyself} /></div>
+        <h3 class="mt-10 text-sm font-medium uppercase tracking-wide text-muted">From Others I've Read or Heard</h3>
+        <div class="mt-4"><QuoteList quotes={quotes} /></div>
+      </section>
+
+      <section id="books">
+        <h2 class="font-serif text-2xl font-medium">Books</h2>
+        <ResourceList items={books} />
+      </section>
+
+      <section id="podcasts">
+        <h2 class="font-serif text-2xl font-medium">Podcasts</h2>
+        <ResourceList items={podcasts} />
+      </section>
+
+      <section id="videos">
+        <h2 class="font-serif text-2xl font-medium">YouTube &amp; Videos</h2>
+        <ResourceList items={videos} />
+      </section>
+
+      <section id="people">
+        <h2 class="font-serif text-2xl font-medium">People</h2>
+        <p class="mt-1 text-sm text-muted">The ones I like, and the ones who helped me &mdash; whether they know it or not.</p>
+        <ul class="mt-6 space-y-6">
+          {people.map((person) => (
+            <li class="border-b border-border pb-6 last:border-b-0">
+              {person.href ? (
+                <a href={person.href} target="_blank" rel="noopener noreferrer" class="text-lg font-medium text-foreground hover:text-accent">{person.name}</a>
+              ) : (
+                <span class="text-lg font-medium text-foreground">{person.name}</span>
+              )}
+              <p class="text-sm text-muted">{person.relationship}</p>
+              <p class="mt-2 text-muted">{person.note}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section id="tools">
+        <h2 class="font-serif text-2xl font-medium">Apps &amp; Tools</h2>
+        <p class="mt-1 text-sm text-muted">What got me here, and what I actually still reach for every day.</p>
+        <h3 class="mt-8 text-sm font-medium uppercase tracking-wide text-muted">Then &mdash; tools that got me here</h3>
+        <ResourceList items={toolsThen} />
+        <h3 class="mt-8 text-sm font-medium uppercase tracking-wide text-muted">Now &mdash; tools I use every day</h3>
+        <ResourceList items={toolsNow} />
+      </section>
+    </div>
+  </div>
+</Base>

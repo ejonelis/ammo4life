@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import PostCard from '../components/PostCard.astro';
+import TopicPills from '../components/TopicPills.astro';
+import NewsletterForm from '../components/NewsletterForm.astro';
+import { getAllPosts, getAllTopics } from '../lib/posts';
+import { siteConfig } from '../lib/site-config';
+import { quotes } from '../lib/wisdom';
+
+const posts = (await getAllPosts()).slice(0, 3);
+const topics = await getAllTopics();
+const featuredQuotes = quotes.slice(0, 2);
+---
+
+<Base>
+  <div class="mx-auto max-w-3xl px-6">
+    <section class="py-16 sm:py-24">
+      <h1 class="font-serif text-4xl font-medium leading-tight tracking-tight sm:text-5xl">{siteConfig.tagline}</h1>
+      <p class="mt-6 max-w-xl text-lg leading-relaxed text-muted">{siteConfig.author.shortBio}</p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a href="/journey" class="rounded-full bg-accent px-5 py-2.5 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90">Read my journey</a>
+        <a href="/wisdom" class="rounded-full border border-border px-5 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-accent hover:text-accent">Open the Wisdom Chest</a>
+      </div>
+    </section>
+
+    {featuredQuotes.length > 0 && (
+      <section class="border-t border-border py-16">
+        <div class="mb-8 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl font-medium">From the Wisdom Chest</h2>
+          <a href="/wisdom" class="text-sm text-muted hover:text-accent">Open the chest &rarr;</a>
+        </div>
+        <div class="space-y-8">
+          {featuredQuotes.map((quote) => (
+            <blockquote class="border-l-2 border-accent pl-6">
+              <p class="font-serif text-xl italic leading-snug text-foreground">&ldquo;{quote.text}&rdquo;</p>
+              <footer class="mt-3 text-sm text-muted">&mdash; {quote.author}</footer>
+            </blockquote>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {posts.length > 0 && (
+      <section class="border-t border-border py-16">
+        <div class="mb-8 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl font-medium">Latest articles</h2>
+          <a href="/articles" class="text-sm text-muted hover:text-accent">All articles &rarr;</a>
+        </div>
+        <div>
+          {posts.map((post) => <PostCard post={post} />)}
+        </div>
+      </section>
+    )}
+
+    {topics.length > 0 && (
+      <section class="border-t border-border py-16">
+        <h2 class="mb-6 font-serif text-2xl font-medium">Browse by topic</h2>
+        <TopicPills topics={topics} />
+      </section>
+    )}
+
+    <section id="newsletter" class="border-t border-border py-16">
+      <div class="rounded-2xl bg-surface p-8 sm:p-10">
+        <h2 class="font-serif text-2xl font-medium">Get it as I add to it</h2>
+        <p class="mt-3 max-w-lg text-muted">New quotes, books, and lessons for the chest, plus what I'm writing — straight to your inbox. No fluff, no spam.</p>
+        <div class="mt-6"><NewsletterForm /></div>
+      </div>
+    </section>
+  </div>
+</Base>
+

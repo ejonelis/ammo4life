@@ -1,0 +1,22 @@
+---
+import type { Quote } from '../lib/wisdom';
+
+interface Props {
+  quotes: Quote[];
+}
+const { quotes } = Astro.props;
+---
+
+<div class="space-y-5">
+  {quotes.map((quote) => (
+    <blockquote class="border-l-2 border-accent pl-5">
+      <p class="font-serif text-lg italic leading-snug text-foreground">&ldquo;{quote.text}&rdquo;</p>
+      {(quote.author || quote.note) && (
+        <footer class="mt-2 text-sm text-muted">
+          {quote.author && <>&mdash; {quote.author}</>}
+          {quote.note && <span class="block mt-1">{quote.note}</span>}
+        </footer>
+      )}
+    </blockquote>
+  ))}
+</div>

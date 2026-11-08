@@ -1,0 +1,22 @@
+---
+import type { Resource } from '../lib/wisdom';
+
+interface Props {
+  items: Resource[];
+}
+const { items } = Astro.props;
+---
+
+<ul class="mt-6 space-y-6">
+  {items.map((item) => (
+    <li class="border-b border-border pb-6 last:border-b-0">
+      {item.href ? (
+        <a href={item.href} target="_blank" rel="noopener noreferrer" class="text-lg font-medium text-foreground hover:text-accent">{item.title}</a>
+      ) : (
+        <span class="text-lg font-medium text-foreground">{item.title}</span>
+      )}
+      <p class="text-sm text-muted">{item.creator}</p>
+      <p class="mt-2 text-muted">{item.note}</p>
+    </li>
+  ))}
+</ul>

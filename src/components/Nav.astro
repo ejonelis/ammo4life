@@ -1,0 +1,56 @@
+---
+interface Props {
+  items: { label: string; href: string }[];
+}
+const { items } = Astro.props;
+---
+
+<div class="relative">
+  <nav class="hidden items-center gap-x-6 text-sm sm:flex">
+    {items.map((item) => (
+      <a href={item.href} class="text-muted transition-colors hover:text-foreground">{item.label}</a>
+    ))}
+    <a href="/#newsletter" class="rounded-full bg-accent px-4 py-1.5 text-accent-foreground transition-opacity hover:opacity-90">Subscribe</a>
+  </nav>
+
+  <button
+    type="button"
+    id="nav-toggle"
+    aria-expanded="false"
+    aria-controls="nav-menu"
+    aria-label="Open menu"
+    class="flex h-9 w-9 items-center justify-center rounded-full text-foreground sm:hidden"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" class="h-5 w-5">
+      <path id="nav-icon-open" d="M4 7h16M4 12h16M4 17h16"></path>
+      <path id="nav-icon-close" d="M6 6l12 12M18 6L6 18" class="hidden"></path>
+    </svg>
+  </button>
+
+  <nav id="nav-menu" hidden class="absolute right-0 top-full z-10 mt-3 w-56 rounded-2xl border border-border bg-background p-3 shadow-lg sm:hidden">
+    <div class="flex flex-col">
+      {items.map((item) => (
+        <a href={item.href} class="rounded-lg px-3 py-2.5 text-sm text-muted transition-colors hover:bg-surface hover:text-foreground">{item.label}</a>
+      ))}
+    </div>
+    <a href="/#newsletter" class="mt-2 block rounded-full bg-accent px-4 py-2 text-center text-sm text-accent-foreground transition-opacity hover:opacity-90">Subscribe</a>
+  </nav>
+</div>
+
+<script>
+  const toggle = document.getElementById('nav-toggle')!;
+  const menu = document.getElementById('nav-menu')!;
+  const iconOpen = document.getElementById('nav-icon-open')!;
+  const iconClose = document.getElementById('nav-icon-close')!;
+
+  function setOpen(open: boolean) {
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    iconOpen.classList.toggle('hidden', open);
+    iconClose.classList.toggle('hidden', !open);
+  }
+
+  toggle.addEventListener('click', () => setOpen(menu.hidden));
+  menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+</script>

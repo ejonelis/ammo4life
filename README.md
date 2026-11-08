@@ -1,26 +1,31 @@
 # Ammo4Life
 
 A minimal, personal blog about the mindset shifts, tools, and decisions behind
-going from employee to founder. Built with Next.js, MDX, and Supabase.
+going from employee to founder. Built with Astro, MDX, and Cloudflare Workers + D1.
 
 ## Stack
 
-- **Next.js (App Router) + TypeScript + Tailwind CSS** — the site itself, deployed on Vercel.
-- **MDX files in `content/posts/`** — articles are Markdown with frontmatter, no database or CMS required. Write a post, commit, push, done.
-- **Supabase** — used for exactly one thing: storing newsletter signups in a `subscribers` table. Nothing else on the site touches a database.
+- **Astro + Tailwind 4**, deployed on Cloudflare Workers via `@astrojs/cloudflare` (same setup as the DNA Window & Door site).
+- **MDX files in `src/content/posts/`**: articles are Markdown with frontmatter; no CMS needed.
+- **Cloudflare D1**: one `subscribers` table for newsletter signups (`migrations/0001_subscribers.sql`).
 
 ## Local development
 
 ```bash
 npm install
-npm run dev
+npm run dev        # http://localhost:4321 (newsletter needs the Workers runtime, see below)
+npm run preview    # build + wrangler dev, with a local D1
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The site runs fine without Supabase configured — every page works, only the newsletter signup will return a friendly error until you connect it (see below).
+First time only, create the local table:
+
+```bash
+npx wrangler d1 migrations apply ammo4life --local
+```
 
 ## Writing a post
 
-Add a new `.mdx` file to `content/posts/`, e.g. `content/posts/my-new-post.mdx`:
+Add `src/content/posts/my-new-post.mdx`:
 
 ```mdx
 ---
@@ -33,41 +38,28 @@ topics: ["Mindset", "Tools"]
 Your article content, in Markdown.
 ```
 
-- `topics` can be any strings you like — topic pages and the topic filter on `/articles` are generated automatically from whatever topics appear across your posts.
-- Posts are sorted by `date`, newest first.
-- Commit and push; Vercel rebuilds the site.
+Topic filters on `/articles?topic=<slug>` are generated from the topics across posts.
 
-## Personalizing the site
+## Deploying
 
-Almost everything you'd want to change on first launch lives in two files:
+One-time setup (needs a Cloudflare login):
 
-- `src/lib/site-config.ts` — your name, bio, tagline, nav links, social links.
-- `src/app/journey/page.tsx` — the "My Journey" narrative (currently placeholder `[Edit this: ...]` sections).
-- `src/lib/resources.ts` — the curated books/podcasts/videos/tools list on `/resources`.
-
-## Setting up Supabase (newsletter signups)
-
-1. Create a free project at [supabase.com](https://supabase.com).
-2. In the Supabase SQL editor, run the migration in `supabase/migrations/0001_subscribers.sql`. It creates a `subscribers` table with row-level security that only allows *inserts* — nobody can read the list back out through the public API, including you, except from the Supabase dashboard itself (which uses your own authenticated access and bypasses RLS).
-3. In Supabase, go to **Project Settings → API** and copy the **Project URL** and the **anon public key**.
-4. Copy `.env.local.example` to `.env.local` and fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY`.
-5. Restart `npm run dev`. The newsletter form on the homepage and at the bottom of every article will now work.
-6. To see or export subscribers, use the **Table Editor** in the Supabase dashboard — there's intentionally no admin UI on the site itself.
-
-## Deploying to Vercel
-
-1. Push this repo to GitHub (or GitLab/Bitbucket).
-2. Go to [vercel.com/new](https://vercel.com/new) and import the repo.
-3. In the Vercel project's **Environment Variables**, add `SUPABASE_URL` and `SUPABASE_ANON_KEY` with the same values from your `.env.local`.
-4. Deploy. Every future push to your main branch redeploys automatically.
-5. To use `ammo4life.com`: in the Vercel project, go to **Settings → Domains**, add `ammo4life.com`, and follow Vercel's instructions to point your domain's DNS at Vercel (usually an A record or CNAME, depending on your registrar).
-
-## Project structure
-
+```bash
+npx wrangler login
+npx wrangler d1 create ammo4life           # paste the database_id into wrangler.jsonc
+npx wrangler d1 migrations apply ammo4life --remote
 ```
-content/posts/        MDX articles (frontmatter + content)
-src/app/               Pages (Home, Articles, Article detail, Journey, Resources, API routes)
-src/components/        Header, Footer, PostCard, TopicPills, NewsletterForm
-src/lib/                Post loading, site config, resources data, Supabase client
-supabase/migrations/    SQL for the subscribers table
+
+Then either connect the GitHub repo in Cloudflare (Workers & Pages > Import from Git; build `npm run build`, deploy `npx wrangler deploy`) or run `npm run deploy`.
+
+## Subscribers
+
+```bash
+npx wrangler d1 execute ammo4life --remote --command "select email, created_at from subscribers"
 ```
+
+Optional spam protection: set `TURNSTILE_SECRET_KEY` (secret) and `PUBLIC_TURNSTILE_SITE_KEY`; see `.dev.vars.example`.
+
+## Personalizing
+
+Site name, tagline, bio and nav live in `src/lib/site-config.ts`; the Wisdom Chest content is in `src/lib/wisdom.ts`.

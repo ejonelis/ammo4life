@@ -1,0 +1,15 @@
+---
+interface Props {
+  topics: { name: string; slug: string; count: number }[];
+}
+const { topics } = Astro.props;
+const base = 'rounded-full border px-3.5 py-1.5 text-sm transition-colors';
+const inactive = 'border-border text-muted hover:text-foreground';
+---
+
+<div class="flex flex-wrap gap-2" data-topic-pills data-base={base} data-inactive={inactive}>
+  <a href="/articles" data-slug="" class={`${base} border-accent bg-accent text-accent-foreground`}>All</a>
+  {topics.map((topic) => (
+    <a href={`/articles?topic=${topic.slug}`} data-slug={topic.slug} class={`${base} ${inactive}`}>{topic.name}</a>
+  ))}
+</div>

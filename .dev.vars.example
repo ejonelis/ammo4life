@@ -1,3 +1,13 @@
+# Copy to .dev.vars for local dev. In production set these as Worker secrets:
+#   npx wrangler secret put SUPABASE_URL
+#   npx wrangler secret put SUPABASE_ANON_KEY
+
+# Supabase project (Project Settings > API Keys): the publishable key (or legacy anon key).
+# Only used server-side;
+# RLS on `subscribers` allows inserts and nothing else.
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-anon-public-key
+
 # Optional. Turnstile spam check for the newsletter form (leave unset to disable).
 TURNSTILE_SECRET_KEY=
 PUBLIC_TURNSTILE_SITE_KEY=

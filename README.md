@@ -1,27 +1,23 @@
 # Ammo4Life
 
 A minimal, personal blog about the mindset shifts, tools, and decisions behind
-going from employee to founder. Built with Astro, MDX, and Cloudflare Workers + D1.
+going from employee to founder. Built with Astro, MDX, Cloudflare Workers and Supabase (free plan).
 
 ## Stack
 
 - **Astro + Tailwind 4**, deployed on Cloudflare Workers via `@astrojs/cloudflare` (same setup as the DNA Window & Door site).
 - **MDX files in `src/content/posts/`**: articles are Markdown with frontmatter; no CMS needed.
-- **Cloudflare D1**: one `subscribers` table for newsletter signups (`migrations/0001_subscribers.sql`).
+- **Supabase (free plan)**: one `subscribers` table for newsletter signups (`supabase/migrations/0001_subscribers.sql`). RLS allows inserts only, so the list can't be read through the public API.
 
 ## Local development
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321 (newsletter needs the Workers runtime, see below)
-npm run preview    # build + wrangler dev, with a local D1
+npm run dev        # http://localhost:4321
+npm run preview    # build + wrangler dev (closest to production)
 ```
 
-First time only, create the local table:
-
-```bash
-npx wrangler d1 migrations apply ammo4life --local
-```
+Copy `.dev.vars.example` to `.dev.vars` and fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY` (Supabase > Project Settings > API Keys; use the publishable key). Without them every page works; only the newsletter signup returns an error.
 
 ## Writing a post
 
@@ -46,17 +42,21 @@ One-time setup (needs a Cloudflare login):
 
 ```bash
 npx wrangler login
-npx wrangler d1 create ammo4life           # paste the database_id into wrangler.jsonc
-npx wrangler d1 migrations apply ammo4life --remote
+npx wrangler secret put SUPABASE_URL
+npx wrangler secret put SUPABASE_ANON_KEY
 ```
+
+If the Supabase project is new, run `supabase/migrations/0001_subscribers.sql` in its SQL editor first.
+
+The Worker serves `ammo4life.com` and `www.ammo4life.com` (custom domains in `wrangler.jsonc`; DNS is on Cloudflare, registrar is GoDaddy). `www` is the main address: a Cloudflare Redirect Rule sends `ammo4life.com/*` to `www`, keeping the query string.
 
 Then either connect the GitHub repo in Cloudflare (Workers & Pages > Import from Git; build `npm run build`, deploy `npx wrangler deploy`) or run `npm run deploy`.
 
 ## Subscribers
 
-```bash
-npx wrangler d1 execute ammo4life --remote --command "select email, created_at from subscribers"
-```
+View or export them in the Supabase dashboard (Table Editor > `subscribers`). There's intentionally no admin UI on the site.
+
+Note: free Supabase projects pause after about a week with no activity. If signups are quiet, check the dashboard now and then and click **Restore** if it's paused (or upgrade).
 
 Optional spam protection: set `TURNSTILE_SECRET_KEY` (secret) and `PUBLIC_TURNSTILE_SITE_KEY`; see `.dev.vars.example`.
 

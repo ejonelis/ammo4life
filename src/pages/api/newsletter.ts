@@ -1,6 +1,5 @@
 import type { APIRoute } from 'astro';
-import { env } from 'cloudflare:workers';
-import { TURNSTILE_SECRET_KEY } from 'astro:env/server';
+import { SUPABASE_URL, SUPABASE_ANON_KEY, TURNSTILE_SECRET_KEY } from 'astro:env/server';
 
 export const prerender = false;
 
@@ -37,9 +36,29 @@ export const POST: APIRoute = async ({ request }) => {
     if (!out.success) return json({ error: 'Spam check failed. Please try again.' }, 400);
   }
 
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    console.error('Newsletter signup failed: SUPABASE_URL / SUPABASE_ANON_KEY not set.');
+    return json({ error: 'Something went wrong. Please try again in a moment.' }, 500);
+  }
+
   try {
-    // Already subscribed is treated as success (UNIQUE email + OR IGNORE).
-    await env.DB.prepare('INSERT OR IGNORE INTO subscribers (email) VALUES (?)').bind(email).run();
+    // Insert via Supabase's REST API. RLS on `subscribers` allows anon inserts only,
+    // so ask for no response body (return=minimal); reading rows back would be denied.
+    const res = await fetch(`${SUPABASE_URL.replace(/\/+$/, '')}/rest/v1/subscribers`, {
+      method: 'POST',
+      headers: {
+        // Works with both the publishable key (sb_publishable_…) and a legacy anon key.
+        apikey: SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal',
+      },
+      body: JSON.stringify({ email }),
+    });
+
+    // 409 = unique_violation (23505): already subscribed, treat as success.
+    if (!res.ok && res.status !== 409) {
+      throw new Error(`Supabase ${res.status}: ${await res.text()}`);
+    }
     return json({ ok: true });
   } catch (err) {
     console.error('Newsletter signup failed:', err);

@@ -6,7 +6,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://ammo4life.com',
+  site: 'https://www.ammo4life.com',
   // Match the old Next.js URLs exactly: /articles/slug, no trailing slash.
   trailingSlash: 'never',
   build: { format: 'file' },
@@ -16,6 +16,8 @@ export default defineConfig({
   vite: { plugins: [tailwindcss()] },
   env: {
     schema: {
+      SUPABASE_URL: envField.string({ context: 'server', access: 'secret', optional: true }),
+      SUPABASE_ANON_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       TURNSTILE_SECRET_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
       PUBLIC_TURNSTILE_SITE_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
     },

@@ -2,12 +2,12 @@
   "name": "ammo4life",
   "compatibility_date": "2026-10-06",
   "observability": { "enabled": true },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "ammo4life",
-      "database_id": "REPLACE_AFTER_wrangler_d1_create",
-      "migrations_dir": "migrations"
-    }
+  "workers_dev": false,
+  // Serve the site on the real domain (DNS for ammo4life.com is on Cloudflare).
+  "routes": [
+    { "pattern": "ammo4life.com", "custom_domain": true },
+    { "pattern": "www.ammo4life.com", "custom_domain": true }
   ]
+  // Newsletter signups go to Supabase. Set SUPABASE_URL and SUPABASE_ANON_KEY with
+  // `npx wrangler secret put <NAME>` (or in the Cloudflare dashboard > Settings > Variables).
 }

@@ -14,7 +14,9 @@ interface Props {
 
 const { title, description = siteConfig.description, type = 'website' } = Astro.props;
 const fullTitle = title ? `${title} — ${siteConfig.name}` : `${siteConfig.name} — ${siteConfig.tagline}`;
-const canonical = new URL(Astro.url.pathname, siteConfig.url).toString();
+// Static pages are built as /page.html (build.format 'file'), but are served at /page.
+const cleanPath = Astro.url.pathname.replace(/(\/index)?\.html$/, '') || '/';
+const canonical = new URL(cleanPath, siteConfig.url).toString();
 ---
 
 <!doctype html>

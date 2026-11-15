@@ -4,7 +4,7 @@ export const siteConfig = {
   tagline: "Everything I want my kids to have, if I'm not there to say it.",
   description:
     "A running wisdom chest — quotes, books, podcasts, people, and lessons from the journey of building something of my own. Not advice, just ponderings — written down so they don't disappear. Started for my children. Open to anyone who finds them useful.",
-  url: "https://ammo4life.com",
+  url: "https://www.ammo4life.com",
   author: {
     name: "Your Name",
     shortBio:

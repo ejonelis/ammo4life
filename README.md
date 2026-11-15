@@ -50,7 +50,7 @@ If the Supabase project is new, run `supabase/migrations/0001_subscribers.sql` i
 
 The Worker serves `ammo4life.com` and `www.ammo4life.com` (custom domains in `wrangler.jsonc`; DNS is on Cloudflare, registrar is GoDaddy). `www` is the main address: a Cloudflare Redirect Rule sends `ammo4life.com/*` to `www`, keeping the query string.
 
-Then either connect the GitHub repo in Cloudflare (Workers & Pages > Import from Git; build `npm run build`, deploy `npx wrangler deploy`) or run `npm run deploy`.
+Every push to `main` on GitHub deploys automatically (Cloudflare Workers Builds: `npm run build`, then `npx wrangler deploy`; see the Worker's Settings > Builds). To deploy from your machine instead, run `npm run deploy`.
 
 ## Subscribers
 
